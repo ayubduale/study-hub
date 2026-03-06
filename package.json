@@ -1,0 +1,46 @@
+{
+  "name": "study-hub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayubduale/study-hub.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ayubduale/study-hub/issues"
+  },
+  "homepage": "https://github.com/ayubduale/study-hub#readme",
+  "dependencies": {
+    "@prisma/client": "^7.4.2",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "autoprefixer": "^10.4.27",
+    "bcryptjs": "^3.0.3",
+    "jsonwebtoken": "^9.0.3",
+    "next": "^16.1.6",
+    "postcss": "^8.5.8",
+    "prisma": "^7.4.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
+    "tailwindcss": "^4.2.1"
+  },
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}

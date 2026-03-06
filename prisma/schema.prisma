@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String
+  year      Int
+  semester  String
+  section   String
+  groups    Group[]
+  messages  Message[]
+}
+
+model Group {
+  id       Int      @id @default(autoincrement())
+  name     String
+  subject  String
+  year     Int
+  semester String
+  section  String
+  users    User[]
+  messages Message[]
+}
+
+model Message {
+  id        Int    @id @default(autoincrement())
+  groupId   Int
+  userId    Int
+  type      String // "chat", "question", "answer"
+  text      String
+  group     Group  @relation(fields: [groupId], references: [id])
+  user      User   @relation(fields: [userId], references: [id])
+}
