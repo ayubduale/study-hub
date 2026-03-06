@@ -3,39 +3,49 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())  // Clerk user ID
   email     String   @unique
-  name      String
-  password  String
-  year      Int
-  semester  String
-  section   String
-  groups    Group[]
+  name      String?
+  year      Int?
+  semester  String?
+  section   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  groups    Group[]  @relation("UserGroups")
   messages  Message[]
+
+  @@map("users")
 }
 
 model Group {
-  id       Int      @id @default(autoincrement())
-  name     String
-  subject  String
-  year     Int
-  semester String
-  section  String
-  users    User[]
-  messages Message[]
+  id        Int       @id @default(autoincrement())
+  name      String
+  subject   String
+  year      Int
+  semester  String
+  section   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  users     User[]    @relation("UserGroups")
+  messages  Message[]
+
+  @@map("groups")
 }
 
 model Message {
-  id        Int    @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   groupId   Int
-  userId    Int
-  type      String // "chat", "question", "answer"
+  userId    String   // Clerk user ID
+  type      String   // "chat" | "question" | "answer"
   text      String
-  group     Group  @relation(fields: [groupId], references: [id])
-  user      User   @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("messages")
 }

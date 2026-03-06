@@ -1,46 +1,53 @@
 {
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "@prisma/client": "^7.4.2",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.5",
+    "bcryptjs": "^3.0.3",
+    "jsonwebtoken": "^9.0.3",
+    "next": "15.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^25.3.5",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "15.0.0",
+    "postcss": "^8.4.32",
+    "prisma": "^7.4.2",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3"
+  },
   "name": "study-hub",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib"
+  "main": "next.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push",
+    "postinstall": "prisma generate"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ayubduale/study-hub.git"
   },
-  "keywords": [],
-  "author": "",
+  "author": "ayub",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/ayubduale/study-hub/issues"
   },
-  "homepage": "https://github.com/ayubduale/study-hub#readme",
-  "dependencies": {
-    "@prisma/client": "^7.4.2",
-    "@types/bcryptjs": "^2.4.6",
-    "@types/jsonwebtoken": "^9.0.10",
-    "autoprefixer": "^10.4.27",
-    "bcryptjs": "^3.0.3",
-    "jsonwebtoken": "^9.0.3",
-    "next": "^16.1.6",
-    "postcss": "^8.5.8",
-    "prisma": "^7.4.2",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "socket.io": "^4.8.3",
-    "socket.io-client": "^4.8.3",
-    "tailwindcss": "^4.2.1"
-  },
-  "scripts": {
-    "dev": "node server.js",
-    "build": "next build",
-    "start": "NODE_ENV=production node server.js",
-    "prisma:generate": "prisma generate",
-    "prisma:push": "prisma db push"
-  },
-  "devDependencies": {
-    "typescript": "5.9.3"
-  }
+  "homepage": "https://github.com/ayubduale/study-hub#readme"
 }
