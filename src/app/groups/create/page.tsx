@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 export default function CreateGroupPage() {
   const [name, setName] = useState("");
@@ -11,6 +12,7 @@ export default function CreateGroupPage() {
   const [section, setSection] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { user } = useUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +23,6 @@ export default function CreateGroupPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           name,
@@ -63,7 +64,7 @@ export default function CreateGroupPage() {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="input-field"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="e.g., Computer Science 2024"
           />
         </div>
@@ -77,7 +78,7 @@ export default function CreateGroupPage() {
             required
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            className="input-field"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="e.g., Data Structures"
           />
         </div>
@@ -91,7 +92,7 @@ export default function CreateGroupPage() {
               value={year}
               onChange={(e) => setYear(e.target.value)}
               required
-              className="input-field"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Year</option>
               <option value="1">1st Year</option>
@@ -109,7 +110,7 @@ export default function CreateGroupPage() {
               value={semester}
               onChange={(e) => setSemester(e.target.value)}
               required
-              className="input-field"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Sem</option>
               <option value="1">Semester 1</option>
@@ -127,7 +128,7 @@ export default function CreateGroupPage() {
               onChange={(e) => setSection(e.target.value.toUpperCase())}
               required
               maxLength={1}
-              className="input-field"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="A"
             />
           </div>
@@ -137,14 +138,14 @@ export default function CreateGroupPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="btn-primary flex-1"
+            className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
             {isLoading ? "Creating..." : "Create Group"}
           </button>
           <button
             type="button"
             onClick={() => router.back()}
-            className="btn-secondary"
+            className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300"
           >
             Cancel
           </button>

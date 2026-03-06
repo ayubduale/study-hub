@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
 
 async function getGroups() {
   const groups = await prisma.group.findMany({
@@ -19,6 +20,7 @@ async function getGroups() {
 }
 
 export default async function GroupsPage() {
+  const { userId } = await auth();
   const groups = await getGroups();
 
   return (

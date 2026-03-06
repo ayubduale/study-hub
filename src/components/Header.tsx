@@ -1,30 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useUser, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
 export default function Header() {
-  const router = useRouter();
-  const [user, setUser] = useState<{ name: string } | null>(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        setUser({ name: payload.email });
-      } catch {
-        localStorage.removeItem("token");
-      }
-    }
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
-    router.push("/");
-  };
+  const { isSignedIn, user } = useUser();
 
   return (
     <header className="bg-white shadow-sm">
@@ -36,7 +16,7 @@ export default function Header() {
           <Link href="/groups" className="text-gray-600 hover:text-gray-900">
             Browse Groups
           </Link>
-          {user ? (
+          {isSignedIn ? (
             <>
               <Link
                 href="/groups/create"
@@ -45,23 +25,24 @@ export default function Header() {
                 Create Group
               </Link>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">{user.name}</span>
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600"
-                >
-                  Logout
-                </button>
+                <span className="text-sm text-gray-600">
+                  {user?.fullName || user?.emailAddresses[0]?.emailAddress}
+                </span>
+                <UserButton afterSignOutUrl="/" />
               </div>
             </>
           ) : (
             <>
-              <Link
-                href="/"
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-              >
-                Login / Register
-              </Link>
+              <SignInButton mode="modal">
+                <button className="text-gray-600 hover:text-gray-900">
+                  Login
+                </button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                  Register
+                </button>
+              </SignUpButton>
             </>
           )}
         </div>

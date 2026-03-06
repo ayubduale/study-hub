@@ -2,45 +2,30 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import ChatBox from "@/components/ui/ChatBox";
 import QuestionBoard from "@/components/ui/QuestionBoard";
 
 export default function GroupPage() {
   const params = useParams();
   const groupId = parseInt(params.id as string);
+  const { user, isLoaded } = useUser();
 
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
   const [groupName, setGroupName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Get user info from localStorage
-    const token = localStorage.getItem("token");
-    const name = localStorage.getItem("userName");
+    if (!isLoaded) return;
 
-    if (!token || !name) {
+    if (!user) {
       window.location.href = "/";
       return;
-    }
-
-    setUserName(name);
-
-    try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      setUserEmail(payload.email);
-    } catch (error) {
-      console.error("Invalid token");
     }
 
     // Fetch group details
     const fetchGroup = async () => {
       try {
-        const res = await fetch(`/api/groups?id=${groupId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(`/api/groups?id=${groupId}`);
 
         if (res.ok) {
           const data = await res.json();
@@ -54,15 +39,23 @@ export default function GroupPage() {
     };
 
     fetchGroup();
-  }, [groupId]);
+  }, [groupId, user, isLoaded]);
 
-  if (isLoading) {
+  if (!isLoaded || isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="text-gray-500">Loading group...</div>
       </div>
     );
   }
+
+  if (!user) {
+    return null; // Will redirect in useEffect
+  }
+
+  const userName =
+    user.fullName || user.emailAddresses[0]?.emailAddress || "User";
+  const userEmail = user.emailAddresses[0]?.emailAddress || "";
 
   return (
     <div>
