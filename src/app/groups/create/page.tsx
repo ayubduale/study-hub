@@ -11,14 +11,37 @@ export default function CreateGroupPage() {
   const [semester, setSemester] = useState("");
   const [section, setSection] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
+
+  if (!isLoaded) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="text-gray-500">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    router.push("/");
+    return null;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
 
     try {
+      console.log("Submitting form with data:", {
+        name,
+        subject,
+        year,
+        semester,
+        section,
+      }); // Debug log
+
       const res = await fetch("/api/groups", {
         method: "POST",
         headers: {
@@ -33,66 +56,91 @@ export default function CreateGroupPage() {
         }),
       });
 
+      const data = await res.json();
+      console.log("Response:", res.status, data); // Debug log
+
       if (res.ok) {
-        const group = await res.json();
-        router.push(`/groups/${group.id}`);
+        router.push(`/groups/${data.id}`);
       } else {
-        const error = await res.text();
-        alert(error || "Failed to create group");
+        setError(data.error || data.message || "Failed to create group");
       }
     } catch (error) {
-      alert("Something went wrong");
+      console.error("Fetch error:", error);
+      setError("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">Create Study Group</h1>
+    <div className="max-w-2xl mx-auto px-4">
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">
+        Create Study Group
+      </h1>
+
+      {error && (
+        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+          <p className="text-sm text-red-600">{error}</p>
+        </div>
+      )}
 
       <form
         onSubmit={handleSubmit}
         className="bg-white rounded-lg shadow-lg p-8 space-y-6"
       >
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Group Name
           </label>
           <input
+            id="name"
             type="text"
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="e.g., Computer Science 2024"
+            disabled={isLoading}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="subject"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Subject
           </label>
           <input
+            id="subject"
             type="text"
             required
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="e.g., Data Structures"
+            disabled={isLoading}
           />
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="year"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Year
             </label>
             <select
+              id="year"
               value={year}
               onChange={(e) => setYear(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              disabled={isLoading}
             >
               <option value="">Select Year</option>
               <option value="1">1st Year</option>
@@ -103,14 +151,19 @@ export default function CreateGroupPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="semester"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Semester
             </label>
             <select
+              id="semester"
               value={semester}
               onChange={(e) => setSemester(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              disabled={isLoading}
             >
               <option value="">Select Sem</option>
               <option value="1">Semester 1</option>
@@ -119,17 +172,22 @@ export default function CreateGroupPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="section"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Section
             </label>
             <input
+              id="section"
               type="text"
               value={section}
               onChange={(e) => setSection(e.target.value.toUpperCase())}
               required
               maxLength={1}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent uppercase"
               placeholder="A"
+              disabled={isLoading}
             />
           </div>
         </div>
@@ -138,14 +196,15 @@ export default function CreateGroupPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isLoading ? "Creating..." : "Create Group"}
           </button>
           <button
             type="button"
             onClick={() => router.back()}
-            className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300"
+            disabled={isLoading}
+            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Cancel
           </button>

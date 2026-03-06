@@ -22,7 +22,6 @@ export default function GroupPage() {
       return;
     }
 
-    // Fetch group details
     const fetchGroup = async () => {
       try {
         const res = await fetch(`/api/groups?id=${groupId}`);

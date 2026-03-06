@@ -4,11 +4,11 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String   @id @default(cuid())  // Clerk user ID
+  id        String   @id @default(cuid()) 
   email     String   @unique
   name      String?
   year      Int?
@@ -40,8 +40,8 @@ model Group {
 model Message {
   id        Int      @id @default(autoincrement())
   groupId   Int
-  userId    String   // Clerk user ID
-  type      String   // "chat" | "question" | "answer"
+  userId    String
+  type      String   
   text      String
   createdAt DateTime @default(now())
   group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
