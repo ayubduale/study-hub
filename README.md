@@ -11,34 +11,33 @@ Tech Stack
 - TypeScript
 - Tailwind CSS
 
-project structure
 study-hub/
 ├── prisma/
-│ └── schema.prisma
+│   └── schema.prisma
 ├── src/
-│ ├── app/
-│ │ ├── api/
-│ │ │ ├── auth/
-│ │ │ │ └── [...nextauth]/route.ts
-│ │ │ ├── posts/
-│ │ │ │ ├── route.ts
-│ │ │ │ └── [id]/route.ts
-│ │ │ └── register/route.ts
-│ │ ├── posts/
-│ │ │ ├── page.tsx
-│ │ │ ├── new/page.tsx
-│ │ │ └── [id]/page.tsx
-│ │ │ └── edit/page.tsx
-│ │ ├── layout.tsx
-│ │ ├── page.tsx
-│ │ └── globals.css
-│ ├── components/
-│ │ ├── Header.tsx
-│ │ ├── PostCard.tsx
-│ │ └── Provider.tsx
-│ └── lib/
-│ ├── prisma.ts
-│ └── auth.ts
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── auth/
+│   │   │   │   └── [...nextauth]/route.ts
+│   │   │   ├── posts/
+│   │   │   │   ├── route.ts
+│   │   │   │   └── [id]/route.ts
+│   │   │   └── register/route.ts
+│   │   ├── posts/
+│   │   │   ├── page.tsx
+│   │   │   ├── new/page.tsx
+│   │   │   └── [id]/page.tsx
+│   │   │       └── edit/page.tsx
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   └── globals.css
+│   ├── components/
+│   │   ├── Header.tsx
+│   │   ├── PostCard.tsx
+│   │   └── Provider.tsx
+│   └── lib/
+│       ├── prisma.ts
+│       └── auth.ts
 ├── public/
 ├── .env.local
 ├── package.json
